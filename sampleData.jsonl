@@ -1,0 +1,2 @@
+{"table":"users","document":{"name":"Vikas Gautam","email":"vikas@example.com","role":"user","createdAt":1710000000000}}
+{"table":"users","document":{"name":"Admin User","email":"admin@example.com","role":"admin","createdAt":1710000500000}}
