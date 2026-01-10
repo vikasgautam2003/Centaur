@@ -1,2 +1,5 @@
-{"table":"users","document":{"name":"Vikas Gautam","email":"vikas@example.com","role":"user","createdAt":1710000000000}}
-{"table":"users","document":{"name":"Admin User","email":"admin@example.com","role":"admin","createdAt":1710000500000}}
+{"text": "Buy Groceries", "isCompleted": false}
+{"text": "Walk the Dog", "isCompleted": true}
+{"text": "Read a Book", "isCompleted": false}
+{"text": "Write Code",  "isCompleted": true}
+{"text": "Exercise",  "isCompleted": false}
