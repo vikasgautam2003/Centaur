@@ -10,6 +10,10 @@ export const useProjects = () => {
 }
 
 
+export const useProject = (projectId: Id<"projects">) => {
+  return useQuery(api.project.getById, { id: projectId });
+}
+
 
 
 export const useProjectsPartial = (limit: number) => {
@@ -37,6 +41,47 @@ export const useCreateProject = () => {
           newProject,
           ...existingProjects,
         ]);
+      }
+    }
+  )
+};
+
+
+
+
+
+export const useRenameProject = (projectId: Id<"projects">) => {
+  return useMutation(api.project.rename).withOptimisticUpdate(
+    (localStore, args) => {
+      const existingProject = localStore.getQuery(
+        api.project.getById,
+        { id: args.id }
+      );
+
+      if (existingProject !== undefined  && existingProject !== null) {
+        localStore.setQuery(
+          api.project.getById,
+          { id: args.id },
+          {
+            ...existingProject,
+            name: args.name,
+            updatedAt: Date.now(),
+          }
+        );
+      }
+
+      const existingProjects = localStore.getQuery(api.project.get);
+
+      if (existingProjects !== undefined) {
+        localStore.setQuery(
+          api.project.get,
+          {},
+          existingProjects.map((project) => {
+            return project._id === args.id
+              ? { ...project, name: args.name, updatedAt: Date.now() }
+              : project
+          })
+        );
       }
     }
   )

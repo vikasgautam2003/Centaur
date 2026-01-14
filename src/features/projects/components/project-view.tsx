@@ -19,11 +19,13 @@ import {
 } from "unique-names-generator"
 import { useState } from "react"
 import { ProjectsCommandDialog } from "./projects-command-dialog"
+import { Id } from "../../../../convex/_generated/dataModel"
 
 const fonts = Poppins({
   weight: ["400", "600", "700"],
   subsets: ["latin"],
 })
+
 
 export const ProjectsView = () => {
   const creatProject = useCreateProject()
