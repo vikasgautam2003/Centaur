@@ -10,12 +10,45 @@ import { useState } from "react"
 import { Id } from "../../../../../convex/_generated/dataModel"
 import { useProject } from "../hooks/use-projects"
 
+import { useCreateFile, useCreateFolder } from "../hooks/use-files"
+import { CreateInput } from "./create-input"
+
+
+
 export const FileExplorer = ({
   projectId
 }: {
   projectId: Id<"projects">
 }) => {
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(true);
+  const [collapseKey, setCollapseKey] = useState(0);
+  const [creating, setCreating] = useState<"file" | "folder" | null>(
+    null
+  );
+
+
+  const createFile = useCreateFile();
+  const createFolder = useCreateFolder();
+
+  const handleCreate = (name: string) => {
+      setCreating(null);
+
+      if(creating === "file"){
+        createFile({
+            projectId,
+            name, 
+            content: "",
+            parentId: undefined
+        })
+        
+      }else{
+            createFolder({
+                projectId,
+                name,
+                parentId: undefined
+            })
+        }
+  }
 
   const project = useProject(projectId)
   const files: string[] = []
@@ -46,6 +79,8 @@ export const FileExplorer = ({
               e.stopPropagation()
               e.preventDefault()
               setIsOpen(true)
+              setCreating("file");
+
             }}
             className="ml-auto p-1.5 rounded-md opacity-0 group-hover:opacity-100 hover:bg-zinc-700 text-zinc-400 hover:text-white transition-all"
           >
@@ -57,6 +92,7 @@ export const FileExplorer = ({
               e.preventDefault()
               setIsOpen(true)
               // for creating the folder logic will follow
+              setCreating("folder");
             }}
             className="ml-auto p-1.5 rounded-md opacity-0 group-hover:opacity-100 hover:bg-zinc-700 text-zinc-400 hover:text-white transition-all"
           >
@@ -68,6 +104,8 @@ export const FileExplorer = ({
               e.preventDefault()
               setIsOpen(true)
               // Reset Collapse
+              setCollapseKey((prev) => prev + 1);
+              setIsOpen(false);
             }}
             className="ml-auto p-1.5 rounded-md opacity-0 group-hover:opacity-100 hover:bg-zinc-700 text-zinc-400 hover:text-white transition-all"
           >
@@ -75,11 +113,15 @@ export const FileExplorer = ({
           </button>
         </div>
 
-        {isOpen && files.length === 0 && (
-          <div className="ml-6 mt-2 text-xs text-zinc-500 italic">
-            No files yet
-          </div>
-        )}
+       {isOpen && creating && (
+  <CreateInput
+    type={creating}
+    level={0}
+    onSubmit={handleCreate}
+    onCancel={() => setCreating(null)}
+  />
+)}
+
       </div>
     </div>
   )
