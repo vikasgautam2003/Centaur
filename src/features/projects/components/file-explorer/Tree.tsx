@@ -5,6 +5,8 @@ import { LoadingRow } from "./loading-row";
 import { CreateInput } from "./create-input";
 import { Doc, Id } from "../../../../../convex/_generated/dataModel";
 import { useState } from "react";
+import { TreeItemWrapper } from "./tree-item-wrapper";
+import { FileIcon, FolderIcon } from "@react-symbols/icons/utils";
 
 
 export const Tree = ({
@@ -36,10 +38,26 @@ export const Tree = ({
 
     if(item.type === 'file')
     {
+        const fileName = item.name;
         return (
-            <div>
-                I am a file!
-            </div>
+            <TreeItemWrapper 
+            item= {item}
+            level={level}
+            isActive={false}
+            onClick={() => {}}
+            onDoubleClick={() => {}}
+            onRename={() => {
+                setIsRenaming(true);
+            }}
+            onDelete={() => {
+                deleteFile({ id: item._id})
+            }}
+           
+            
+            >
+                <FileIcon fileName={item.name} autoAssign className="size-4" />
+                <span>{fileName} </span>
+            </TreeItemWrapper>
         )
     }
 

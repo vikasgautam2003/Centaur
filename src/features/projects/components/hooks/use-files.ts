@@ -37,5 +37,7 @@ export const useRenameFile = () => {
 
 
 export const useDeleteFile = () => {
-    return useMutation(api.files.deleteFile);
+
+    return useMutation(api.files.deleteFile)
+
 }

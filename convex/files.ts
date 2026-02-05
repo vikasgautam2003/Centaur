@@ -313,7 +313,7 @@ export const renameFile = mutation({
 export const deleteFile = mutation({
   args: {
     id: v.id("files"),
-    newName: v.string()
+    newName: v.optional(v.string())
   },
 
   handler: async (ctx, args) => {
