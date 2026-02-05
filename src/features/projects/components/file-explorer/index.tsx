@@ -10,8 +10,10 @@ import { useState } from "react"
 import { Id } from "../../../../../convex/_generated/dataModel"
 import { useProject } from "../hooks/use-projects"
 
-import { useCreateFile, useCreateFolder } from "../hooks/use-files"
+import { useCreateFile, useCreateFolder, useFolderContents } from "../hooks/use-files"
 import { CreateInput } from "./create-input"
+import { LoadingRow } from "./loading-row"
+import { Tree } from "./Tree"
 
 
 
@@ -27,6 +29,12 @@ export const FileExplorer = ({
   );
 
 
+  const project = useProject(projectId)
+  const rootFiles = useFolderContents({
+      projectId,
+      enabled: isOpen,
+    });
+  
   const createFile = useCreateFile();
   const createFolder = useCreateFolder();
 
@@ -50,7 +58,7 @@ export const FileExplorer = ({
         }
   }
 
-  const project = useProject(projectId)
+
   const files: string[] = []
 
   return (
@@ -114,13 +122,24 @@ export const FileExplorer = ({
         </div>
 
        {isOpen && creating && (
+        <>
+        {rootFiles === undefined && <LoadingRow  level={0}/>}
   <CreateInput
     type={creating}
     level={0}
     onSubmit={handleCreate}
     onCancel={() => setCreating(null)}
   />
+  </>
 )}
+{rootFiles?.map((item) => (
+  <Tree
+     key={`${item._id}-${collapseKey}`}
+     item={item}
+     level={0}
+     projectId={projectId}
+  />
+))}
 
       </div>
     </div>
